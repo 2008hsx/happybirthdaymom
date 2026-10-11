@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>今年，你是我的5/2</title>
+
+<!-- 引入更圆润的字体：LXGW WenKai（霞鹜文楷）圆体，微信内置浏览器可显示 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=LXGW+WenKai&display=swap" rel="stylesheet">
+
+<style>
+/* ===== 基础重置与全局样式 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: "LXGW WenKai", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* 马卡龙紫色渐变背景 */
+  background: linear-gradient(160deg, #f3e8ff 0%, #e9d5ff 40%, #d8b4fe 100%);
+  color: #6b3fa0;
+}
+
+/* ===== 屏幕容器 ===== */
+.screen {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 28px;
+  opacity: 0;
+  transform: translateX(60px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.screen.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  z-index: 10;
+}
+.screen.exit-left {
+  opacity: 0;
+  transform: translateX(-60px) scale(0.96);
+}
+
+/* ===== 通用文字 ===== */
+.title-text {
+  font-size: 34px;
+  text-align: center;
+  margin-top: 18vh;
+  line-height: 1.5;
+  text-shadow: 0 2px 8px rgba(180,140,255,0.4);
+}
+/* 首页和最后一屏：更大更圆润更粗 */
+.hero-title {
+  font-family: "ZCOOL XiaoWei", "LXGW WenKai", sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 20vh;
+  line-height: 1.4;
+  text-shadow: 0 3px 12px rgba(180,140,255,0.5);
+  letter-spacing: 2px;
+}
+.story-text {
+  font-size: 22px;
+  line-height: 1.9;
+  max-width: 90%;
+  text-shadow: 0 1px 4px rgba(180,140,255,0.3);
+}
+
+/* ===== 按钮 ===== */
+.btn {
+  font-family: inherit;
+  font-size: 22px;
+  color: #fff;
+  background: linear-gradient(135deg, #c084fc, #a855f7);
+  border: none;
+  border-radius: 40px;
+  padding: 14px 48px;
+  box-shadow: 0 6px 18px rgba(168,85,247,0.45);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 2px;
+}
+.btn:active { transform: scale(0.94); box-shadow: 0 3px 10px rgba(168,85,247,0.4); }
+
+.btn-enter { margin: 60px auto 0; display: block; }
+.btn-wish  { margin: 40px auto 0; display: block; }
+.btn-done  { margin: 30px auto 0; display: block; }
+.btn-back  { margin: 40px auto 0; display: block; }
+
+/* ===== 右箭头按钮 ===== */
+.arrow-btn {
+  position: fixed;
+  right: 24px; bottom: 30px;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c084fc, #a855f7);
+  border: none;
+  color: #fff;
+  font-size: 30px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(168,85,247,0.5);
+  cursor: pointer;
+  z-index: 100;
+  transition: transform 0.2s;
+}
+.arrow-btn:active { transform: scale(0.9); }
+
+/* ===== 图片容器（预留位置） ===== */
+.img-slot {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+}
+.img-slot img {
+  max-width: 78%;
+  max-height: 52vh;
+  object-fit: contain;
+  border-radius: 24px;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 24px rgba(150,100,220,0.35);
+  cursor: zoom-in;
+}
+
+/* ===== 照片墙 ===== */
+.photo-wall {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 14px;
+  width: 100%;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.photo-item { text-align: center; }
+.photo-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 3px solid #fff;
+  box-shadow: 0 6px 16px rgba(150,100,220,0.3);
+  cursor: zoom-in;
+  display: block;
+}
+.photo-item .caption {
+  margin-top: 8px;
+  font-size: 18px;
+  color: #7c3aed;
+}
+
+/* ===== 许愿页 ===== */
+.wish-img-wrap { margin-top: 16vh; display: flex; justify-content: center; }
+.wish-img-wrap img {
+  width: 62%;
+  max-width: 300px;
+  border-radius: 24px;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 24px rgba(150,100,220,0.35);
+  cursor: zoom-in;
+}
+.wish-tip { text-align: center; margin-top: 22px; font-size: 22px; }
+
+/* ===== 最后一屏 ===== */
+.final-screen { align-items: center; justify-content: center; text-align: center; }
+.final-screen .big-text {
+  font-size: 60px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-shadow: 0 4px 16px rgba(180,140,255,0.6);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* ===== 灯箱大图 ===== */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  cursor: zoom-out;
+}
+.lightbox.show { display: flex; animation: fadeIn 0.25s; }
+.lightbox img {
+  max-width: 92%; max-height: 90%;
+  border-radius: 16px;
+  border: 4px solid #fff;
+  box-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ===== 音乐按钮 ===== */
+.music-btn {
+  position: fixed;
+  top: 20px; right: 20px;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  border: none;
+  font-size: 22px;
+  z-index: 200;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 3px 10px rgba(150,100,220,0.3);
+}
+.music-btn .note { animation: spin 3s linear infinite; display:inline-block; }
+.music-btn.paused .note { animation: none; opacity: 0.5; }
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+/* ===== 装饰元素通用样式 ===== */
+.deco {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 28px;
+  opacity: 0;
+  animation: decoFadeIn 0.8s ease forwards, decoFloat 4s ease-in-out infinite;
+}
+/* 只在当前激活屏显示装饰 */
+.screen.active .deco { opacity: 0.85; }
+.screen.active .deco.delay-1 { animation-delay: 0.3s, 0s; }
+.screen.active .deco.delay-2 { animation-delay: 0.6s, 0.5s; }
+.screen.active .deco.delay-3 { animation-delay: 0.9s, 1s; }
+
+@keyframes decoFadeIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 0.85; transform: scale(1); }
+}
+@keyframes decoFloat {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50%     { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* 静态小装饰（角落点缀） */
+.corner-deco {
+  position: absolute;
+  font-size: 22px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.screen.active .corner-deco { animation: decoFadeIn 1s ease forwards; }
+
+/* 上升漂浮元素（动态生成） */
+.float-item {
+  position: fixed;
+  font-size: 20px;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatUp linear forwards;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) rotate(0); opacity: 0; }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 各屏 ===== -->
+
+<!-- 第一屏：开始 -->
+<section class="screen active" id="s1">
+  <!-- 装饰元素 -->
+  <div class="deco" style="top:8%; left:10%;">🎈</div>
+  <div class="deco delay-1" style="top:15%; right:12%;">💜</div>
+  <div class="deco delay-2" style="bottom:20%; left:8%; font-size:24px;">⭐</div>
+  <div class="deco delay-3" style="top:5%; right:25%; font-size:20px;">🎀</div>
+  <div class="deco delay-1" style="bottom:12%; right:15%; font-size:26px;">💖</div>
+  <div class="corner-deco delay-2" style="top:3%; right:5%;">✦</div>
+  <div class="corner-deco delay-3" style="bottom:5%; left:5%; font-size:18px;">♡</div>
+  <div class="hero-title">今年，你是我的5/2</div>
+  <button class="btn btn-enter" onclick="goTo(2)">进入</button>
+</section>
+
+<!-- 第二屏：出生故事 -->
+<section class="screen" id="s2">
+  <div class="deco" style="top:5%; right:8%;">👶</div>
+  <div class="deco delay-1" style="top:12%; left:5%; font-size:22px;">💕</div>
+  <div class="deco delay-2" style="bottom:8%; left:12%; font-size:24px;">🌸</div>
+  <div class="deco delay-3" style="top:25%; right:5%; font-size:20px;">⭐</div>
+  <div class="corner-deco delay-1" style="top:2%; left:5%;">♡</div>
+  <div class="corner-deco delay-2" style="bottom:3%; right:8%; font-size:18px;">✦</div>
+  <div class="story-text">2008年9月27日，我走进了你的生命，那一年，你27岁......</div>
+  <div class="img-slot"><img src="01.png" alt="01"></div>
+  <button class="arrow-btn" onclick="goTo(3)">&#10095;</button>
+</section>
+
+<!-- 第三屏：童年照片 -->
+<section class="screen" id="s3">
+  <div class="deco" style="top:3%; left:5%;">🧸</div>
+  <div class="deco delay-1" style="top:6%; right:8%;">🎠</div>
+  <div class="deco delay-2" style="top:20%; left:3%; font-size:22px;">🎀</div>
+  <div class="deco delay-3" style="bottom:12%; right:5%; font-size:24px;">🌈</div>
+  <div class="corner-deco delay-1" style="top:2%; right:3%;">✦</div>
+  <div class="corner-deco delay-2" style="bottom:5%; left:3%; font-size:18px;">♡</div>
+  <div class="title-text">你给予了我一个快乐的童年</div>
+  <div class="photo-wall" id="wall3">
+    <div class="photo-item"><img src="02.png" alt="02"><div class="caption">香港迪士尼</div></div>
+    <div class="photo-item"><img src="03.png" alt="03"><div class="caption">韩国济州岛</div></div>
+    <div class="photo-item"><img src="04.png" alt="04"><div class="caption">香港海洋公园</div></div>
+    <div class="photo-item"><img src="05.png" alt="05"><div class="caption">广西桂林</div></div>
+  </div>
+  <button class="btn" id="batchBtn3" style="margin:24px auto 0;display:block;">下一批</button>
+  <button class="arrow-btn" onclick="goTo(4)">&#10095;</button>
+</section>
+
+<!-- 第四屏：阅的到来 -->
+<section class="screen" id="s4">
+  <div class="deco" style="top:5%; left:8%;">🐣</div>
+  <div class="deco delay-1" style="top:10%; right:10%; font-size:24px;">💗</div>
+  <div class="deco delay-2" style="bottom:10%; right:12%; font-size:26px;">🎉</div>
+  <div class="deco delay-3" style="bottom:5%; left:8%; font-size:20px;">⭐</div>
+  <div class="corner-deco delay-1" style="top:2%; right:5%;">♡</div>
+  <div class="corner-deco delay-2" style="top:50%; left:2%; font-size:16px;">✦</div>
+  <div class="story-text">2017年7月13日，阅走进了我们的的生命，那一年，你36岁......</div>
+  <div class="img-slot"><img src="10.png" alt="10"></div>
+  <button class="arrow-btn" onclick="goTo(5)">&#10095;</button>
+</section>
+
+<!-- 第五屏：一起游山玩水 -->
+<section class="screen" id="s5">
+  <div class="deco" style="top:3%; left:5%;">🏔️</div>
+  <div class="deco delay-1" style="top:6%; right:8%;">🌊</div>
+  <div class="deco delay-2" style="top:22%; right:3%; font-size:22px;">🎀</div>
+  <div class="deco delay-3" style="bottom:10%; left:5%; font-size:24px;">🗺️</div>
+  <div class="corner-deco delay-1" style="top:2%; right:3%;">✦</div>
+  <div class="corner-deco delay-2" style="bottom:3%; right:5%; font-size:18px;">♡</div>
+  <div class="title-text">这几年，我们一起游山玩水</div>
+  <div class="photo-wall" id="wall5">
+    <div class="photo-item"><img src="11.png" alt="11"><div class="caption">11.png</div></div>
+    <div class="photo-item"><img src="12.png" alt="12"><div class="caption">12.png</div></div>
+    <div class="photo-item"><img src="13.png" alt="13"><div class="caption">13.png</div></div>
+    <div class="photo-item"><img src="14.png" alt="14"><div class="caption">14.png</div></div>
+  </div>
+  <button class="btn" id="batchBtn5" style="margin:24px auto 0;display:block;">下一批</button>
+  <button class="arrow-btn" onclick="goTo(6)">&#10095;</button>
+</section>
+
+<!-- 第六屏：未来 -->
+<section class="screen" id="s6">
+  <div class="deco" style="top:8%; left:12%;">🎈</div>
+  <div class="deco delay-1" style="top:5%; right:10%;">🌟</div>
+  <div class="deco delay-2" style="bottom:15%; right:14%; font-size:26px;">💜</div>
+  <div class="deco delay-3" style="bottom:8%; left:10%; font-size:24px;">🎀</div>
+  <div class="deco delay-1" style="top:20%; left:5%; font-size:20px;">⭐</div>
+  <div class="corner-deco delay-2" style="top:3%; right:5%;">♡</div>
+  <div class="corner-deco delay-3" style="bottom:3%; right:5%; font-size:18px;">✦</div>
+  <div class="title-text">未来，我们会一直好下去</div>
+  <button class="btn btn-enter" onclick="goTo(7)">进入许愿</button>
+</section>
+
+<!-- 第七屏：许愿 -->
+<section class="screen" id="s7">
+  <div class="deco" style="top:5%; left:10%;">✨</div>
+  <div class="deco delay-1" style="top:8%; right:10%;">🌙</div>
+  <div class="deco delay-2" style="bottom:10%; left:12%; font-size:24px;">⭐</div>
+  <div class="deco delay-3" style="bottom:5%; right:10%; font-size:26px;">💫</div>
+  <div class="deco delay-1" style="top:25%; left:5%; font-size:20px;">💖</div>
+  <div class="corner-deco delay-2" style="top:3%; right:5%;">♡</div>
+  <div class="corner-deco delay-3" style="bottom:3%; left:5%; font-size:18px;">✦</div>
+  <div class="wish-img-wrap"><img src="19.png" alt="19"></div>
+  <div class="wish-tip">对着小天使许愿，愿望会成真喔</div>
+  <button class="btn btn-done" onclick="goTo(8)">许愿完成</button>
+</section>
+
+<!-- 第八屏：最后一屏 -->
+<section class="screen final-screen" id="s8">
+  <div class="deco" style="top:5%; left:8%;">🎈</div>
+  <div class="deco delay-1" style="top:8%; right:8%;">🎈</div>
+  <div class="deco delay-2" style="top:12%; left:15%; font-size:24px;">🎉</div>
+  <div class="deco delay-3" style="top:15%; right:15%; font-size:24px;">🎉</div>
+  <div class="deco delay-1" style="bottom:12%; left:10%; font-size:26px;">💖</div>
+  <div class="deco delay-2" style="bottom:8%; right:10%; font-size:26px;">💖</div>
+  <div class="deco delay-3" style="top:20%; left:5%; font-size:22px;">⭐</div>
+  <div class="deco delay-1" style="top:20%; right:5%; font-size:22px;">⭐</div>
+  <div class="corner-deco delay-2" style="top:3%; left:5%;">♡</div>
+  <div class="corner-deco delay-3" style="top:3%; right:5%;">♡</div>
+  <div class="big-text">HAPPY BIRTHDAY！</div>
+  <button class="btn btn-back" onclick="goTo(1)">回到首页</button>
+</section>
+
+<!-- ===== 灯箱 ===== -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- ===== 背景音乐 ===== -->
+<audio id="bgMusic" loop>
+  <source src="生日歌.flac" type="audio/flac">
+</audio>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+  <span class="note">&#9835;</span>
+</button>
+
+<script>
+/* ===== 屏幕切换（带弹性） ===== */
+let current = 1;
+function goTo(n) {
+  const cur = document.getElementById('s' + current);
+  const next = document.getElementById('s' + n);
+  cur.classList.remove('active');
+  cur.classList.add('exit-left');
+  setTimeout(() => cur.classList.remove('exit-left'), 600);
+  next.classList.add('active');
+  current = n;
+  window.scrollTo(0,0);
+}
+
+/* ===== 下一批 逻辑 ===== */
+// 第三屏：02-05 <-> 06-09
+let batch3 = 0;
+const set3 = [
+  ['02.png','香港迪士尼'],['03.png','韩国济州岛'],['04.png','香港海洋公园'],['05.png','广西桂林']
+];
+const set3b = [
+  ['06.png','06'],['07.png','07'],['08.png','08'],['09.png','09']
+];
+document.getElementById('batchBtn3').onclick = function() {
+  batch3 = 1 - batch3;
+  const data = batch3 ? set3b : set3;
+  const items = document.getElementById('wall3').children;
+  for (let i=0;i<4;i++){
+    items[i].querySelector('img').src = data[i][0];
+    items[i].querySelector('.caption').textContent = data[i][1];
+  }
+  this.textContent = batch3 ? '上一批' : '下一批';
+};
+
+// 第五屏：11-14 <-> 15-18（文字暂为文件名，后续可自行改）
+let batch5 = 0;
+const set5 = [
+  ['11.png','11.png'],['12.png','12.png'],['13.png','13.png'],['14.png','14.png']
+];
+const set5b = [
+  ['15.png','15.png'],['16.png','16.png'],['17.png','17.png'],['18.png','18.png']
+];
+document.getElementById('batchBtn5').onclick = function() {
+  batch5 = 1 - batch5;
+  const data = batch5 ? set5b : set5;
+  const items = document.getElementById('wall5').children;
+  for (let i=0;i<4;i++){
+    items[i].querySelector('img').src = data[i][0];
+    items[i].querySelector('.caption').textContent = data[i][1];
+  }
+  this.textContent = batch5 ? '上一批' : '下一批';
+};
+
+/* ===== 图片点击放大（灯箱） ===== */
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('click', function(e) {
+    if (this.closest('.lightbox')) return;
+    e.stopPropagation();
+    document.getElementById('lightboxImg').src = this.src;
+    document.getElementById('lightbox').classList.add('show');
+  });
+});
+
+/* ===== 动态漂浮装饰 ===== */
+const floatEmojis = ['💜','💖','⭐','🎀','✨','♡','✦','💕','🌸'];
+function spawnFloatItem() {
+  const el = document.createElement('div');
+  el.className = 'float-item';
+  el.textContent = floatEmojis[Math.floor(Math.random() * floatEmojis.length)];
+  el.style.left = Math.random() * 90 + '%';
+  const duration = 5 + Math.random() * 4; // 5~9s
+  el.style.animationDuration = duration + 's';
+  el.style.fontSize = (16 + Math.random() * 14) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), duration * 1000);
+}
+// 每隔3秒生成一个漂浮元素
+setInterval(spawnFloatItem, 3000);
+// 初始生成几个
+for (let i = 0; i < 3; i++) setTimeout(spawnFloatItem, i * 800);
+
+/* ===== 背景音乐控制 ===== */
+const music = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+let musicPlaying = false;
+function toggleMusic() {
+  if (musicPlaying) { music.pause(); musicBtn.classList.add('paused'); }
+  else { music.play().catch(()=>{}); musicBtn.classList.remove('paused'); }
+  musicPlaying = !musicPlaying;
+}
+// 首次点击页面任意处尝试播放（微信需用户交互）
+document.addEventListener('touchstart', function once(){
+  if (!musicPlaying) { music.play().then(()=>{musicPlaying=true;musicBtn.classList.remove('paused');}).catch(()=>{}); }
+  document.removeEventListener('touchstart', once);
+},{once:true});
+</script>
+
+</body>
+</html>
