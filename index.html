@@ -6,7 +6,7 @@
 <title>今年，你是我的5/2</title>
 
 <style>
-/* ===== 本地字体：方正少儿简体 ===== */
+
 @font-face {
   font-family: "FZShaoEr";
   src: url("%E6%96%B9%E6%AD%A3%E5%B0%91%E5%84%BF%E7%AE%80%E4%BD%93.woff2") format("woff2"),
@@ -14,19 +14,19 @@
   font-display: swap;
 }
 
-/* ===== 基础重置与全局样式 ===== */
+
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
   width: 100%; height: 100%;
   overflow: hidden;
   font-family: "FZShaoEr", "PingFang SC", "Microsoft YaHei", sans-serif;
-  /* 马卡龙紫色渐变背景 */
+  
   background: linear-gradient(160deg, #f3e8ff 0%, #e9d5ff 40%, #d8b4fe 100%);
   color: #6b3fa0;
 }
 
-/* ===== 屏幕容器 ===== */
+
 .screen {
   position: absolute;
   top: 0; left: 0;
@@ -53,7 +53,7 @@ html, body {
   transform: translateX(-60px) scale(0.96);
 }
 
-/* ===== 通用文字 ===== */
+
 .title-text {
   font-size: 34px;
   text-align: center;
@@ -61,7 +61,7 @@ html, body {
   line-height: 1.5;
   text-shadow: 0 2px 8px rgba(180,140,255,0.4);
 }
-/* 首页和最后一屏：更大更圆润更粗 */
+
 .hero-title {
   font-family: "FZShaoEr", "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 52px;
@@ -79,7 +79,7 @@ html, body {
   text-shadow: 0 1px 4px rgba(180,140,255,0.3);
 }
 
-/* ===== 按钮 ===== */
+
 .btn {
   font-family: inherit;
   font-size: 22px;
@@ -100,7 +100,7 @@ html, body {
 .btn-done  { margin: 30px auto 0; display: block; }
 .btn-back  { margin: 40px auto 0; display: block; }
 
-/* ===== 右箭头按钮 ===== */
+
 .arrow-btn {
   position: fixed;
   right: 24px; bottom: 30px;
@@ -118,7 +118,7 @@ html, body {
 }
 .arrow-btn:active { transform: scale(0.9); }
 
-/* ===== 图片容器（预留位置） ===== */
+
 .img-slot {
   margin-top: 26px;
   display: flex;
@@ -134,7 +134,7 @@ html, body {
   cursor: zoom-in;
 }
 
-/* ===== 照片墙 ===== */
+
 .photo-wall {
   margin-top: 20px;
   display: grid;
@@ -163,15 +163,15 @@ html, body {
   color: #7c3aed;
 }
 
-/* ===== 第三、五屏：整体上移，缓解局促 ===== */
+
 #s3, #s5 { padding-top: 24px; }
 #s3 .title-text, #s5 .title-text { margin-top: 8vh; }
 #s3 .photo-wall, #s5 .photo-wall { margin-top: 14px; }
 #s3 .photo-item .caption, #s5 .photo-item .caption { margin-top: 6px; }
-/* 照片墙底部留白，避免最后一行被右下角箭头按钮挡住 */
+
 #wall3, #wall5 { padding-bottom: 40px; }
 
-/* ===== 许愿页 ===== */
+
 .wish-img-wrap { margin-top: 16vh; display: flex; justify-content: center; }
 .wish-img-wrap img {
   width: 62%;
@@ -183,16 +183,21 @@ html, body {
 }
 .wish-tip { text-align: center; margin-top: 22px; font-size: 22px; }
 
-/* ===== 最后一屏 ===== */
+
 .final-screen { align-items: center; justify-content: center; text-align: center; }
 .final-screen .big-text {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
   font-size: min(56px, 10.5vw);
   font-weight: 900;
   letter-spacing: 2px;
   line-height: 1.3;
-  width: 100%;
   padding: 0 14px;
   text-align: center;
+  overflow-wrap: break-word;
+  word-break: break-word;
   text-shadow: 0 4px 16px rgba(180,140,255,0.6);
   transform-origin: center center;
   animation: pulse 2s ease-in-out infinite;
@@ -202,7 +207,7 @@ html, body {
   50% { transform: scale(1.06); }
 }
 
-/* ===== 灯箱大图 ===== */
+
 .lightbox {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.85);
@@ -220,7 +225,7 @@ html, body {
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-/* ===== 音乐按钮 ===== */
+
 .music-btn {
   position: fixed;
   top: 20px; right: 20px;
@@ -238,7 +243,7 @@ html, body {
 .music-btn.paused .note { animation: none; opacity: 0.5; }
 @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
-/* ===== 装饰元素通用样式 ===== */
+
 .deco {
   position: absolute;
   pointer-events: none;
@@ -247,7 +252,7 @@ html, body {
   opacity: 0;
   animation: decoFadeIn 0.8s ease forwards, decoFloat 4s ease-in-out infinite;
 }
-/* 只在当前激活屏显示装饰 */
+
 .screen.active .deco { opacity: 0.85; }
 .screen.active .deco.delay-1 { animation-delay: 0.3s, 0s; }
 .screen.active .deco.delay-2 { animation-delay: 0.6s, 0.5s; }
@@ -262,7 +267,7 @@ html, body {
   50%     { transform: translateY(-10px) rotate(5deg); }
 }
 
-/* 静态小装饰（角落点缀） */
+
 .corner-deco {
   position: absolute;
   font-size: 22px;
@@ -272,7 +277,7 @@ html, body {
 }
 .screen.active .corner-deco { animation: decoFadeIn 1s ease forwards; }
 
-/* 上升漂浮元素（动态生成） */
+
 .float-item {
   position: fixed;
   font-size: 20px;
@@ -291,11 +296,11 @@ html, body {
 </head>
 <body>
 
-<!-- ===== 各屏 ===== -->
 
-<!-- 第一屏：开始 -->
+
+
 <section class="screen active" id="s1">
-  <!-- 装饰元素 -->
+  
   <div class="deco" style="top:8%; left:10%;">🎈</div>
   <div class="deco delay-1" style="top:15%; right:12%;">💜</div>
   <div class="deco delay-2" style="bottom:20%; left:8%; font-size:24px;">⭐</div>
@@ -307,7 +312,7 @@ html, body {
   <button class="btn btn-enter" onclick="goTo(2)">进入</button>
 </section>
 
-<!-- 第二屏：出生故事 -->
+
 <section class="screen" id="s2">
   <div class="deco" style="top:5%; right:8%;">👶</div>
   <div class="deco delay-1" style="top:12%; left:5%; font-size:22px;">💕</div>
@@ -319,7 +324,7 @@ html, body {
   <div class="img-slot"><img src="01.png" alt="01"></div>
 </section>
 
-<!-- 第三屏：童年照片 -->
+
 <section class="screen" id="s3">
   <div class="deco" style="top:3%; left:5%;">🧸</div>
   <div class="deco delay-1" style="top:6%; right:8%;">🎠</div>
@@ -340,7 +345,7 @@ html, body {
   </div>
 </section>
 
-<!-- 第四屏：阅的到来 -->
+
 <section class="screen" id="s4">
   <div class="deco" style="top:5%; left:8%;">🐣</div>
   <div class="deco delay-1" style="top:10%; right:10%; font-size:24px;">💗</div>
@@ -352,7 +357,7 @@ html, body {
   <div class="img-slot"><img src="10.png" alt="10"></div>
 </section>
 
-<!-- 第五屏：一起游山玩水 -->
+
 <section class="screen" id="s5">
   <div class="deco" style="top:3%; left:5%;">🏔️</div>
   <div class="deco delay-1" style="top:6%; right:8%;">🌊</div>
@@ -373,7 +378,7 @@ html, body {
   </div>
 </section>
 
-<!-- 第六屏：未来 -->
+
 <section class="screen" id="s6">
   <div class="deco" style="top:8%; left:12%;">🎈</div>
   <div class="deco delay-1" style="top:5%; right:10%;">🌟</div>
@@ -386,7 +391,7 @@ html, body {
   <button class="btn btn-enter" onclick="goTo(7)">进入许愿</button>
 </section>
 
-<!-- 第七屏：许愿 -->
+
 <section class="screen" id="s7">
   <div class="deco" style="top:5%; left:10%;">✨</div>
   <div class="deco delay-1" style="top:8%; right:10%;">🌙</div>
@@ -400,7 +405,7 @@ html, body {
   <button class="btn btn-done" onclick="goTo(8)">许愿完成</button>
 </section>
 
-<!-- 第八屏：最后一屏 -->
+
 <section class="screen final-screen" id="s8">
   <div class="deco" style="top:5%; left:8%;">🎈</div>
   <div class="deco delay-1" style="top:8%; right:8%;">🎈</div>
@@ -412,19 +417,19 @@ html, body {
   <div class="deco delay-1" style="top:20%; right:5%; font-size:22px;">⭐</div>
   <div class="corner-deco delay-2" style="top:3%; left:5%;">♡</div>
   <div class="corner-deco delay-3" style="top:3%; right:5%;">♡</div>
-  <div class="big-text">HAPPY BIRTHDAY！</div>
+  <div class="big-text">HAPPY<br>BIRTHDAY!</div>
   <button class="btn btn-back" onclick="goTo(1)">回到首页</button>
 </section>
 
-<!-- ===== 全局右箭头（body 层级，position:fixed 真正相对视口，不随内容滚动） ===== -->
+
 <button class="arrow-btn" id="globalArrow" style="display:none;">&#10095;</button>
 
-<!-- ===== 灯箱 ===== -->
+
 <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
   <img id="lightboxImg" src="" alt="">
 </div>
 
-<!-- ===== 背景音乐 ===== -->
+
 <audio id="bgMusic" loop>
   <source src="生日歌.flac" type="audio/flac">
 </audio>
@@ -433,9 +438,9 @@ html, body {
 </button>
 
 <script>
-/* ===== 屏幕切换（带弹性） ===== */
+
 let current = 1;
-/* 全局右箭头：仅第 2~5 屏显示，固定悬浮不随页面滚动 */
+
 const arrowNext = { 2: 3, 3: 4, 4: 5, 5: 6 };
 const globalArrow = document.getElementById('globalArrow');
 function updateArrow() {
@@ -461,7 +466,7 @@ function goTo(n) {
 }
 updateArrow();
 
-/* ===== 图片点击放大（灯箱） ===== */
+
 document.querySelectorAll('img').forEach(img => {
   img.addEventListener('click', function(e) {
     if (this.closest('.lightbox')) return;
@@ -471,25 +476,25 @@ document.querySelectorAll('img').forEach(img => {
   });
 });
 
-/* ===== 动态漂浮装饰 ===== */
+
 const floatEmojis = ['💜','💖','⭐','🎀','✨','♡','✦','💕','🌸'];
 function spawnFloatItem() {
   const el = document.createElement('div');
   el.className = 'float-item';
   el.textContent = floatEmojis[Math.floor(Math.random() * floatEmojis.length)];
   el.style.left = Math.random() * 90 + '%';
-  const duration = 5 + Math.random() * 4; // 5~9s
+  const duration = 5 + Math.random() * 4; 
   el.style.animationDuration = duration + 's';
   el.style.fontSize = (16 + Math.random() * 14) + 'px';
   document.body.appendChild(el);
   setTimeout(() => el.remove(), duration * 1000);
 }
-// 每隔3秒生成一个漂浮元素
+
 setInterval(spawnFloatItem, 3000);
-// 初始生成几个
+
 for (let i = 0; i < 3; i++) setTimeout(spawnFloatItem, i * 800);
 
-/* ===== 背景音乐控制 ===== */
+
 const music = document.getElementById('bgMusic');
 const musicBtn = document.getElementById('musicBtn');
 let musicPlaying = false;
@@ -498,7 +503,7 @@ function toggleMusic() {
   else { music.play().catch(()=>{}); musicBtn.classList.remove('paused'); }
   musicPlaying = !musicPlaying;
 }
-// 首次点击页面任意处尝试播放（微信需用户交互）
+
 document.addEventListener('touchstart', function once(){
   if (!musicPlaying) { music.play().then(()=>{musicPlaying=true;musicBtn.classList.remove('paused');}).catch(()=>{}); }
   document.removeEventListener('touchstart', once);
